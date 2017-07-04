@@ -6,7 +6,8 @@ https://github.com/dongjunkun/DropDownMenu 在此基础上做了部分修改！�
  
 ## ScreenShot
  
- 
+
+![](https://github.com/SomnusWu/DropDownMenu/blob/master/xx11Cs.gif)
 
  
 
