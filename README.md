@@ -3,7 +3,7 @@
 ## 简介
 
 https://github.com/dongjunkun/DropDownMenu 在此基础上做了部分修改！！！
- 
+ [apk下载][https://github.com/SomnusWu/DropDownMenu/blob/master/app-debug.apk?raw=true]
 ## ScreenShot
  
 
