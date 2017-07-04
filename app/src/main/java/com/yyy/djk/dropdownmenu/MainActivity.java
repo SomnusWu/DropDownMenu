@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -26,20 +25,14 @@ import butterknife.InjectView;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private String headers[] = {"城市", "年龄", "性别", "星座"};
     @InjectView(R.id.dropDownMenu)
     DropDownMenu mDropDownMenu;
     //内容体
     protected View mContentView;
-
-
-    private String headers[] = {"城市", "年龄", "性别", "星座"};
     private List<View> popupViews = new ArrayList<>();
 
-//    private GirdDropDownAdapter cityAdapter;
-    private ListDropDownAdapter ageAdapter;
-    private ListDropDownAdapter sexAdapter;
-    private ConstellationAdapter constellationAdapter;
+
 
     private String citys[] = {"不限", "武汉", "北京", "上海", "成都", "广州", "深圳", "重庆", "天津", "西安", "南京", "杭州"};
     private String ages[] = {"不限", "18岁以下", "18-22岁", "23-26岁", "27-35岁", "35岁以上"};
@@ -48,13 +41,16 @@ public class MainActivity extends AppCompatActivity {
 
     private int constellationPosition = 0;
 
-
     //主页内容数据
     private RecyclerViewAdapter mRecyclerViewAdapter;
     //城市数据
     private RecyclerViewAdapter mCityRecyclerViewAdapter;
-
-
+    //年龄数据
+    private AgeRecyclerViewAdapter mAgeRecyclerViewAdapter;
+    //性别数据
+    private RecyclerViewAdapter mSexRecyclerViewAdapter;
+    //星座数据
+    private ConstellationAdapter constellationAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-
         //主页面的内容
         mContentView = LayoutInflater.from(this).inflate(R.layout.view_recycler_view_refresh, null);
         RecyclerView mRecyclerView = (RecyclerView) mContentView.findViewById(R.id.rv_list);
@@ -73,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerViewAdapter = new RecyclerViewAdapter();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        mRecyclerViewAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, CityActivity.class);
+                startActivity(intent);
+            }
+        });
 
         final SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) mContentView.findViewById(R.id.swipeLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -95,15 +98,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerViewAdapter.addData(mlist);
     }
 
-    @Override
-    public void onBackPressed() {
-        //退出activity前关闭菜单
-        if (mDropDownMenu.isShowing()) {
-            mDropDownMenu.closeMenu();
-        } else {
-            super.onBackPressed();
-        }
-    }
+
 
     public List<View> getPopUpViews() {
         /***
@@ -119,30 +114,47 @@ public class MainActivity extends AppCompatActivity {
         mCityRecyclerViewAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                mCityRecyclerViewAdapter.setCheckItem(position);
+                mCityRecyclerViewAdapter.setCheckItem(position);
                 mDropDownMenu.setTabText(position == 0 ? headers[0] : citys[position]);
                 mDropDownMenu.closeMenu();
             }
         });
-
-        //        //init city menu
-//        final ListView cityView = new ListView(this);
-//        cityAdapter = new GirdDropDownAdapter(this, Arrays.asList(citys));
-//        cityView.setDividerHeight(0);
-//        cityView.setAdapter(cityAdapter);
-
-        //init age menu
-        final ListView ageView = new ListView(this);
-        ageView.setDividerHeight(0);
-        ageAdapter = new ListDropDownAdapter(this, Arrays.asList(ages));
-        ageView.setAdapter(ageAdapter);
-
-        //init sex menu
-        final ListView sexView = new ListView(this);
-        sexView.setDividerHeight(0);
-        sexAdapter = new ListDropDownAdapter(this, Arrays.asList(sexs));
-        sexView.setAdapter(sexAdapter);
-
+        /**
+         * 年龄布局 数据
+         */
+        final View ageView = getLayoutInflater().inflate(R.layout.layout_recylcer_view, null);
+        RecyclerView mAgeRecycler = (RecyclerView) ageView.findViewById(R.id.recyclerView);
+        mAgeRecycler.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mAgeRecyclerViewAdapter = new AgeRecyclerViewAdapter();
+        mAgeRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mAgeRecyclerViewAdapter.addData(Arrays.asList(ages));
+        mAgeRecycler.setAdapter(mAgeRecyclerViewAdapter);
+        mAgeRecyclerViewAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                mAgeRecyclerViewAdapter.setCheckItem(position);
+                mDropDownMenu.setTabText(position == 0 ? headers[1] : ages[position]);
+                mDropDownMenu.closeMenu();
+            }
+        });
+        /**
+         * 性别布局数据
+         */
+        final View sexView = getLayoutInflater().inflate(R.layout.layout_recylcer_view, null);
+        RecyclerView mSexRecycler = (RecyclerView) sexView.findViewById(R.id.recyclerView);
+        mSexRecycler.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mSexRecyclerViewAdapter = new RecyclerViewAdapter();
+        mSexRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mSexRecyclerViewAdapter.addData(Arrays.asList(sexs));
+        mSexRecycler.setAdapter(mSexRecyclerViewAdapter);
+        mSexRecyclerViewAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                mSexRecyclerViewAdapter.setCheckItem(position);
+                mDropDownMenu.setTabText(position == 0 ? headers[2] : sexs[position]);
+                mDropDownMenu.closeMenu();
+            }
+        });
         //init constellation
         final View constellationView = getLayoutInflater().inflate(R.layout.custom_layout, null);
         GridView constellation = ButterKnife.findById(constellationView, R.id.constellation);
@@ -154,52 +166,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mDropDownMenu.setTabText(constellationPosition == 0 ? headers[3] : constellations[constellationPosition]);
                 mDropDownMenu.closeMenu();
-
-
             }
         });
-
-
-        //init popupViews
-        popupViews.add(cityView);
-        popupViews.add(ageView);
-        popupViews.add(sexView);
-        popupViews.add(constellationView);
-
-//        //add item click event
-//        cityView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                cityAdapter.setCheckItem(position);
-//                mDropDownMenu.setTabText(position == 0 ? headers[0] : citys[position]);
-//                mDropDownMenu.closeMenu();
-//            }
-//        });
-
-        ageView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ageAdapter.setCheckItem(position);
-                mDropDownMenu.setTabText(position == 0 ? headers[1] : ages[position]);
-                mDropDownMenu.closeMenu();
-
-
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, CityActivity.class);
-                startActivity(intent);
-
-            }
-        });
-
-        sexView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sexAdapter.setCheckItem(position);
-                mDropDownMenu.setTabText(position == 0 ? headers[2] : sexs[position]);
-                mDropDownMenu.closeMenu();
-            }
-        });
-
         constellation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -207,6 +175,21 @@ public class MainActivity extends AppCompatActivity {
                 constellationPosition = position;
             }
         });
+        //init popupViews
+        popupViews.add(cityView);
+        popupViews.add(ageView);
+        popupViews.add(sexView);
+        popupViews.add(constellationView);
         return popupViews;
+    }
+
+    @Override
+    public void onBackPressed() {
+        //退出activity前关闭菜单
+        if (mDropDownMenu.isShowing()) {
+            mDropDownMenu.closeMenu();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

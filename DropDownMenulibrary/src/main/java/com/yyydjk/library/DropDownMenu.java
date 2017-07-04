@@ -48,9 +48,6 @@ public class DropDownMenu extends LinearLayout {
     //容器最大高度
     private float menuHeighPercent = 0.5f;
 
-    public void setCurrent_tab_position(int position) {
-        current_tab_position = position;
-    }
 
     public DropDownMenu(Context context) {
         super(context, null);
@@ -185,8 +182,13 @@ public class DropDownMenu extends LinearLayout {
         }
     }
 
-    public void setTabTitle(String title) {
-        ((TJTextDrawableVIew) tabMenuView.getChildAt(0)).setText(title);
+    /**
+     * 进入设置指定标题
+     * @param title 标题
+     * @param index 第几个tab
+     */
+    public void setTabTitle(String title,int index) {
+        ((TJTextDrawableVIew) tabMenuView.getChildAt(index)).setText(title);
     }
 
     public void setTabClickable(boolean clickable) {

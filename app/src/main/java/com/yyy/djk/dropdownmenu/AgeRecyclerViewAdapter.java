@@ -11,16 +11,16 @@ import com.chad.library.adapter.base.BaseViewHolder;
  * @Description:
  */
 
-public class RecyclerViewAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+public class AgeRecyclerViewAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
 
-    private int checkItemPosition=-1;
+    private int checkItemPosition = -1;
 
     public void setCheckItem(int position) {
         checkItemPosition = position;
         notifyDataSetChanged();
     }
 
-    public RecyclerViewAdapter() {
+    public AgeRecyclerViewAdapter() {
         super(R.layout.item_constellation_layout);
     }
 
@@ -32,10 +32,10 @@ public class RecyclerViewAdapter extends BaseQuickAdapter<String, BaseViewHolder
         if (checkItemPosition != -1) {
             if (checkItemPosition == position) {
                 mTvText.setTextColor(mContext.getResources().getColor(R.color.drop_down_selected));
-                mTvText.setCompoundDrawablesWithIntrinsicBounds(null, null, mContext.getResources().getDrawable(R.drawable.drop_down_checked), null);
+                mTvText.setBackgroundResource(R.color.check_bg);
             } else {
                 mTvText.setTextColor(mContext.getResources().getColor(R.color.drop_down_unselected));
-                mTvText.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                mTvText.setBackgroundResource(R.color.white);
             }
         }
     }
