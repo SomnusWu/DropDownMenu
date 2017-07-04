@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#ffffff</color>
+    <color name="gray">#cccccc</color>
+
+    <color name="drop_down_selected">#5C91ED</color>
+    <color name="drop_down_unselected">#111111</color>
+
+    <!--遮罩层的颜色 灰色-->
+    <color name="mask_color">#59000000</color>
+    <color name="check_bg">#f2f2f2</color>
+    <color name="un_press_color">#5C91ED</color>
+
+
+</resources>
