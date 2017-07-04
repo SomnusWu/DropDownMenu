@@ -41,6 +41,6 @@ https://github.com/dongjunkun/DropDownMenu 在此基础上做了部分修改！�
 mDropDownMenu.setDropDownMenu(tabs, popupViews, contentView);
 ```
 
-> 建议拷贝代码到项目中使用，拷贝DropDownMenu.java 以及res下的所有文件即可
+> 建议拷贝代码到项目中使用，拷贝DropDownMenulibrary  ，使用方法参考Demo
 
  
